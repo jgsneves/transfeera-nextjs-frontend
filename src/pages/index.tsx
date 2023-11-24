@@ -1,7 +1,6 @@
 import Head from "next/head";
 import { Header } from "../components/Header";
-import { CreateReceiver } from "../components/Receiver/CreateReceiver";
-import { FilterReceiver } from "../components/Receiver/FilterReceiver";
+import { UnderlineTabs } from "../components/UnderlineTabs/indext";
 
 export default function Home() {
   return (
@@ -14,10 +13,7 @@ export default function Home() {
       </Head>
       <main className="max-w-screen-lg mx-auto">
         <Header />
-        <div className="flex justify-between">
-          <CreateReceiver />
-          <FilterReceiver />
-        </div>
+        <UnderlineTabs />
       </main>
     </>
   );
