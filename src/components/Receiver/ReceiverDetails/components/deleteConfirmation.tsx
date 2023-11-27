@@ -8,6 +8,11 @@ import {
   ReceiversService,
 } from "../../../../services/receivers-service";
 import { KeyedMutator } from "swr";
+import {
+  renderToast,
+  setToastContent,
+} from "../../../../store/slices/toast-slice";
+import { useToast } from "../../../../hooks/use-toast";
 
 interface Props {
   name: string;
@@ -23,6 +28,7 @@ export const DeleteConfirmation = ({
   setRenderDeleteConfirmation,
 }: Props) => {
   const dispatcher = useDispatch();
+  const toast = useToast();
 
   const handleCloseModal = () => {
     dispatcher(toggleModal());
@@ -35,12 +41,12 @@ export const DeleteConfirmation = ({
   const handleDeleteOnClick = () => {
     ReceiversService.deleteReceiver(id).then(
       () => {
-        //todo toast
+        toast("Favorecido apagado com sucesso", "success");
         mutate();
         handleCloseModal();
       },
       () => {
-        //todo toast
+        toast("Houve algum erro", "danger");
       }
     );
   };

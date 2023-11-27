@@ -11,6 +11,7 @@ import {
   ReceiversService,
 } from "../../../../services/receivers-service";
 import { FormikHelpers } from "formik";
+import { useToast } from "../../../../hooks/use-toast";
 
 interface Props {
   receiver: Receiver;
@@ -30,7 +31,9 @@ export const DraftReceiverDetails = ({
     pix_key: pixKey,
     pix_key_type: pixKeyType,
   } = receiver;
+
   const dispatcher = useDispatch();
+  const toast = useToast();
 
   const handleGoBackOnClick = () => {
     dispatcher(toggleModal());
@@ -43,11 +46,13 @@ export const DraftReceiverDetails = ({
     ReceiversService.updateReceiver(receiver.id, values)
       .then(
         () => {
+          mutate();
           dispatcher(toggleModal());
-          //todo toast
+
+          toast("Favorecido alterado com sucesso", "success");
         },
         () => {
-          //todo toast
+          toast("Houve algum erro", "danger");
         }
       )
       .finally(() => helpers.setSubmitting(false));

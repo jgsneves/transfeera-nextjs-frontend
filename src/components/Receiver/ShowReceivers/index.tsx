@@ -6,6 +6,7 @@ import { Receiver } from "../../../models/receiver";
 import { useFetchReceivers } from "../../../hooks/use-fetch-receivers";
 import { paginationLimit } from "../../../constants/pagination-limit";
 import { ReceiversService } from "../../../services/receivers-service";
+import { useToast } from "../../../hooks/use-toast";
 
 export type SortingCriteria =
   | "name"
@@ -27,6 +28,7 @@ export const ShowReceivers = () => {
     sortOrder,
     currentPage
   );
+  const toast = useToast();
 
   if (isLoading) return <h1>Carregando...</h1>;
 
@@ -43,11 +45,11 @@ export const ShowReceivers = () => {
 
       await Promise.all(promises).then(
         () => {
-          // todo toast
+          toast("Favorecido(s) apagado(s) com sucesso", "success");
           setSelectedReceivers([]);
         },
         () => {
-          //todo toast
+          toast("Houve algum erro", "danger");
         }
       );
 

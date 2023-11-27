@@ -1,5 +1,4 @@
 import Head from "next/head";
-import { Button } from "../../components/Button";
 import { Header } from "../../components/Header";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { PixKeyTypes } from "../../constants/pix-key-types";
@@ -11,6 +10,7 @@ import {
 import { FormikHelpers } from "formik";
 import { ReceiversService } from "../../services/receivers-service";
 import { useFetchReceivers } from "../../hooks/use-fetch-receivers";
+import { useToast } from "../../hooks/use-toast";
 
 export default function NovoFavorecido() {
   const formInitialValues: ReceiverFormValues = {
@@ -23,6 +23,7 @@ export default function NovoFavorecido() {
 
   const router = useRouter();
   const { mutate } = useFetchReceivers();
+  const toast = useToast();
 
   const handleGoBackOnClick = (event: React.MouseEvent) => {
     event.preventDefault();
@@ -45,10 +46,10 @@ export default function NovoFavorecido() {
       .then(
         () => {
           mutate();
-          // todo: use toast
+          toast("Favorecido apagado com sucesso", "success");
         },
         () => {
-          // todo: use toast
+          toast("Houve algum erro", "danger");
         }
       )
       .finally(() => {

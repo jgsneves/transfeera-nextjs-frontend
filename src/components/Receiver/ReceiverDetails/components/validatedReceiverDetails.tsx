@@ -19,6 +19,7 @@ import {
   ReceiversService,
 } from "../../../../services/receivers-service";
 import { KeyedMutator } from "swr";
+import { useToast } from "../../../../hooks/use-toast";
 
 interface Props {
   receiver: Receiver;
@@ -35,6 +36,7 @@ export const ValidatedReceiverDetails = ({
   const [error, setError] = useState<boolean>(false);
 
   const dispatcher = useDispatch();
+  const toast = useToast();
 
   const handleGoBackOnClick = () => {
     dispatcher(toggleModal());
@@ -60,10 +62,11 @@ export const ValidatedReceiverDetails = ({
         () => {
           mutate();
           dispatcher(toggleModal());
-          //todo: render toast
+
+          toast("Favorecido alterado com sucesso", "success");
         },
         () => {
-          //todo: render toast
+          toast("Houve algum erro", "danger");
         }
       );
     } else {

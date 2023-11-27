@@ -1,6 +1,8 @@
 import Head from "next/head";
 import { Header } from "../components/Header";
 import { UnderlineTabs } from "../components/UnderlineTabs/indext";
+import { Toast } from "../components/Toast";
+import { createPortal } from "react-dom";
 
 export default function Home() {
   return (
@@ -14,6 +16,7 @@ export default function Home() {
       <main className="max-w-screen-lg mx-auto">
         <Header />
         <UnderlineTabs />
+        {createPortal(<Toast />, document.body)}
       </main>
     </>
   );
