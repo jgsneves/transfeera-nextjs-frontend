@@ -9,6 +9,12 @@ import {
   isValidCNPJ,
   isValidCPF,
 } from "@brazilian-utils/brazilian-utils";
+import { useDispatch } from "react-redux";
+import {
+  setSelectedReceiverId,
+  toggleModal,
+} from "../../../../store/slices/receiver-detail-slice";
+import { formatAccountNumber } from "../../../../utils/account-number";
 
 interface Props {
   receiverRows: Receiver[];
@@ -18,8 +24,6 @@ interface Props {
   setSortOrder: Dispatch<SetStateAction<SortingOrder>>;
   selectedReceivers: Receiver[];
   setSelectedReceivers: Dispatch<SetStateAction<Receiver[]>>;
-  setRenderReceiverDetailsModal: Dispatch<SetStateAction<boolean>>;
-  setReceiverId: Dispatch<SetStateAction<string | undefined>>;
 }
 
 export const Table = ({
@@ -30,12 +34,12 @@ export const Table = ({
   setSortOrder,
   selectedReceivers,
   setSelectedReceivers,
-  setRenderReceiverDetailsModal,
-  setReceiverId,
 }: Props) => {
   const isSelectAllRowsCheckboxChecked = receiverRows.every((row) =>
     selectedReceivers.some((selectedReceiver) => selectedReceiver.id === row.id)
   );
+
+  const dispatcher = useDispatch();
 
   const renderSortingSvg = () => {
     if (sortingOrder === "asc") {
@@ -78,8 +82,8 @@ export const Table = ({
   };
 
   const handleNameOnClick = (receiverId: string) => {
-    setRenderReceiverDetailsModal(true);
-    setReceiverId(receiverId);
+    dispatcher(toggleModal());
+    dispatcher(setSelectedReceiverId(receiverId));
   };
 
   return (
@@ -91,7 +95,7 @@ export const Table = ({
               type="checkbox"
               className="w-5 h-5 rounded-lg"
               checked={isSelectAllRowsCheckboxChecked}
-              onClick={() => handleSelectAllCheckboxOnClick()}
+              onChange={() => handleSelectAllCheckboxOnClick()}
             />
           </th>
           <th
@@ -158,7 +162,7 @@ export const Table = ({
                 type="checkbox"
                 className="w-5 h-5 rounded-lg"
                 checked={isRowChecked(receiver.id)}
-                onClick={() => handleCheckboxRowOnClick(receiver)}
+                onChange={() => handleCheckboxRowOnClick(receiver)}
               />
             </td>
             <td>
@@ -172,7 +176,7 @@ export const Table = ({
             <td>{formatTaxId(receiver.tax_id)}</td>
             <td>{receiver.bank_name}</td>
             <td>{receiver.branch}</td>
-            <td>{receiver.account}</td>
+            <td>{formatAccountNumber(receiver.account)}</td>
             <td>
               <StatusLabel status={receiver.status} />
             </td>

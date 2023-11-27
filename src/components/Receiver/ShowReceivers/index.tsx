@@ -2,10 +2,10 @@ import { useState } from "react";
 import { Button } from "../../Button";
 import { Pagination } from "../../Pagination";
 import { Table } from "./components/table";
-import { ReceiverStatus } from "../../../constants/receiver-status";
-import { PixKeyTypes } from "../../../constants/pix-key-types";
 import { Receiver } from "../../../models/receiver";
-import { Modal } from "../../Modal";
+import { useFetchReceivers } from "../../../hooks/use-fetch-receivers";
+import { paginationLimit } from "../../../constants/pagination-limit";
+import { ReceiversService } from "../../../services/receivers-service";
 
 export type SortingCriteria =
   | "name"
@@ -21,80 +21,39 @@ export const ShowReceivers = () => {
   const [sortCriteria, setSortCriteria] = useState<SortingCriteria>("name");
   const [sortOrder, setSortOrder] = useState<SortingOrder>("asc");
   const [selectedReceivers, setSelectedReceivers] = useState<Receiver[]>([]);
-  const [renderReceiverDetailsModal, setRenderReceiverDetailsModal] =
-    useState<boolean>(false);
-  const [receiverId, setReceiverId] = useState<string | undefined>();
 
-  const receivers = [
-    {
-      id: "6c90bb97-5c48-4f45-b363-47521f7f0832",
-      name: "Rafael Costa",
-      branch: "3402",
-      account: "517638",
-      bank_code: "160",
-      status: ReceiverStatus.RASCUNHO,
-      tax_id: "79915139000115",
-      checked: false,
-      account_type: null,
-      bank_name: "Santander",
-      created_at: new Date().toISOString(),
-      email: "email@email.com",
-      pix_key: "email@email.com",
-      pix_key_type: PixKeyTypes.EMAIL,
-      updated_at: new Date().toISOString(),
-    },
-    {
-      id: "52902d57-3bf8-4a8e-9e0c-c2f9c67c7ead",
-      name: "Joao Neves",
-      branch: "3402",
-      account: "517638",
-      bank_code: "160",
-      status: ReceiverStatus.RASCUNHO,
-      tax_id: "03510884582",
-      checked: false,
-      account_type: null,
-      bank_name: "Santander",
-      created_at: new Date().toISOString(),
-      email: "email@email.com",
-      pix_key: "email@email.com",
-      pix_key_type: PixKeyTypes.EMAIL,
-      updated_at: new Date().toISOString(),
-    },
-    {
-      id: "35b52b96-6e12-4b57-9e53-f0cd2aca5004",
-      name: "José da Silva",
-      branch: "3402",
-      account: "517638",
-      bank_code: "160",
-      status: ReceiverStatus.VALIDO,
-      tax_id: "79915139000115",
-      checked: false,
-      account_type: null,
-      bank_name: "Santander",
-      created_at: new Date().toISOString(),
-      email: "email@email.com",
-      pix_key: "email@email.com",
-      pix_key_type: PixKeyTypes.EMAIL,
-      updated_at: new Date().toISOString(),
-    },
-    {
-      id: "2c54b534-b9a1-406a-9222-a445fff0e914",
-      name: "zezinho",
-      branch: "3402",
-      account: "517638",
-      bank_code: "160",
-      status: ReceiverStatus.RASCUNHO,
-      tax_id: "79915139000115",
-      checked: false,
-      account_type: null,
-      bank_name: "Santander",
-      created_at: new Date().toISOString(),
-      email: "email@email.com",
-      pix_key: "email@email.com",
-      pix_key_type: PixKeyTypes.EMAIL,
-      updated_at: new Date().toISOString(),
-    },
-  ];
+  const { data, error, isLoading, mutate } = useFetchReceivers(
+    sortCriteria,
+    sortOrder,
+    currentPage
+  );
+
+  if (isLoading) return <h1>Carregando...</h1>;
+
+  if (error || !data)
+    return <h1>Houve um erro. Entre em contato com o suporte</h1>;
+
+  const pageAmount = Math.floor(data.total / paginationLimit);
+
+  const handleDeleteOnClick = async () => {
+    if (selectedReceivers.length > 0) {
+      const promises = selectedReceivers.map((receiver) =>
+        ReceiversService.deleteReceiver(receiver.id)
+      );
+
+      await Promise.all(promises).then(
+        () => {
+          // todo toast
+          setSelectedReceivers([]);
+        },
+        () => {
+          //todo toast
+        }
+      );
+
+      mutate();
+    }
+  };
 
   return (
     <article className="flex flex-col">
@@ -102,32 +61,25 @@ export const ShowReceivers = () => {
         theme="danger"
         className="my-10"
         disabled={selectedReceivers.length === 0}
+        onClick={handleDeleteOnClick}
       >
         Excluir selecionados
       </Button>
       <Table
-        receiverRows={receivers}
+        receiverRows={data.receivers}
         sorting={sortCriteria}
         sortingOrder={sortOrder}
         setSortCriteria={setSortCriteria}
         setSortOrder={setSortOrder}
         selectedReceivers={selectedReceivers}
         setSelectedReceivers={setSelectedReceivers}
-        setRenderReceiverDetailsModal={setRenderReceiverDetailsModal}
-        setReceiverId={setReceiverId}
       />
       <Pagination
         className="mt-10"
         active={currentPage}
-        pageAmount={3}
+        pageAmount={pageAmount}
         setActive={setCurrentPage}
       />
-      <Modal
-        isOpen={renderReceiverDetailsModal}
-        setOpen={setRenderReceiverDetailsModal}
-      >
-        <h1>detalhes de um favorecido: {receiverId}</h1>
-      </Modal>
     </article>
   );
 };

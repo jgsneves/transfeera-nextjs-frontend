@@ -4,13 +4,57 @@ import { Header } from "../../components/Header";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { PixKeyTypes } from "../../constants/pix-key-types";
 import { useRouter } from "next/router";
+import {
+  ReceiverForm,
+  ReceiverFormValues,
+} from "../../components/Receiver/ReceiverForm";
+import { FormikHelpers } from "formik";
+import { ReceiversService } from "../../services/receivers-service";
+import { useFetchReceivers } from "../../hooks/use-fetch-receivers";
 
 export default function NovoFavorecido() {
+  const formInitialValues: ReceiverFormValues = {
+    email: "",
+    name: "",
+    pixKey: "",
+    pixKeyType: PixKeyTypes.EMAIL,
+    taxId: "",
+  };
+
   const router = useRouter();
+  const { mutate } = useFetchReceivers();
 
   const handleGoBackOnClick = (event: React.MouseEvent) => {
     event.preventDefault();
-    router.back();
+    router.push("/");
+  };
+
+  const handleFormSubmit = (
+    values: ReceiverFormValues,
+    helpers: FormikHelpers<ReceiverFormValues>
+  ) => {
+    const { email, name, pixKey, pixKeyType, taxId } = values;
+
+    ReceiversService.createReceiver({
+      email,
+      name,
+      pix_key: pixKey,
+      pix_key_type: pixKeyType,
+      tax_id: taxId,
+    })
+      .then(
+        () => {
+          mutate();
+          // todo: use toast
+        },
+        () => {
+          // todo: use toast
+        }
+      )
+      .finally(() => {
+        helpers.setSubmitting(false);
+        router.push("/");
+      });
   };
 
   return (
@@ -30,58 +74,11 @@ export default function NovoFavorecido() {
           </button>
         </nav>
 
-        <form action="">
-          <h1 className="py-[30px]">Quais os dados do favorecido?</h1>
-          <div className="flex flex-wrap gap-10">
-            <label htmlFor="name" className="flex flex-col w-[370px]">
-              Qual nome completo ou razão social do favorecido?
-              <input
-                id="name"
-                type="text"
-                className="border-2 border-gray rounded h-8"
-              />
-            </label>
-
-            <label htmlFor="cpf" className="flex flex-col">
-              Qual CPF ou CNPJ?
-              <input id="cpf" className="border-2 border-gray rounded h-8" />
-            </label>
-
-            <label htmlFor="email" className="flex flex-col w-[370px]">
-              Qual o e-mail para o envio do comprovante?
-              <input id="email" className="border-2 border-gray rounded h-8" />
-            </label>
-          </div>
-
-          <h1 className="py-[30px]">Qual a chave pix?</h1>
-          <div className="flex flex-col gap-10">
-            <label htmlFor="pixKeyType" className="flex flex-col w-[370px]">
-              Tipo de chave
-              <select
-                id="pixKeyType"
-                className="border-2 border-gray rounded h-8"
-              >
-                {Object.values(PixKeyTypes).map((value) => (
-                  <option key={value} value={value}>
-                    {value}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <label htmlFor="pixKey" className="flex flex-col w-[370px]">
-              Chave
-              <input id="pixKey" className="border-2 border-gray rounded h-8" />
-            </label>
-          </div>
-
-          <footer className="flex justify-between mt-20">
-            <Button theme="secondary" onClick={handleGoBackOnClick}>
-              Cancelar
-            </Button>
-            <Button theme="primary">Salvar</Button>
-          </footer>
-        </form>
+        <ReceiverForm
+          handleGoBackOnClick={handleGoBackOnClick}
+          initialValues={formInitialValues}
+          handleOnSubmit={handleFormSubmit}
+        />
       </main>
     </>
   );

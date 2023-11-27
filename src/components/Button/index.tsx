@@ -5,6 +5,7 @@ interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   disabled?: boolean;
   className?: string;
+  iconButton?: boolean;
 }
 
 export const Button = ({
@@ -12,6 +13,7 @@ export const Button = ({
   theme,
   disabled,
   className,
+  iconButton,
   ...props
 }: Props) => {
   function defineClassNameAttachment(): string {
@@ -31,11 +33,17 @@ export const Button = ({
     return "";
   }
 
+  function defineMinWidth(): string {
+    if (!iconButton) return "min-w-[200px]";
+
+    return "";
+  }
+
   const classes = className ? className : "";
 
   return (
     <button
-      className={`${defineClassNameAttachment()} ${defineDisabledStateClassName()} ${classes} px-3 py-3 rounded min-w-[200px] w-fit`}
+      className={`${defineClassNameAttachment()} ${defineDisabledStateClassName()} ${classes} ${defineMinWidth()} px-3 py-3 rounded  w-fit flex align-center justify-center items-center`}
       {...props}
     >
       {children}

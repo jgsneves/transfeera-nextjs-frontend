@@ -2,9 +2,10 @@ import { ReceiverStatus } from "../../../../constants/receiver-status";
 
 interface Props {
   status: ReceiverStatus;
+  className?: string;
 }
 
-export const StatusLabel = ({ status }: Props) => {
+export const StatusLabel = ({ status, className }: Props) => {
   const content = status.charAt(0).toUpperCase() + status.slice(1);
 
   const defineBackgroundColor = () => {
@@ -17,7 +18,9 @@ export const StatusLabel = ({ status }: Props) => {
 
   return (
     <span
-      className={`w-full ${defineBackgroundColor()} rounded-full px-10 py-1 mt-2 block text-center text-white`}
+      className={`w-full ${defineBackgroundColor()} ${
+        className ? className : ""
+      } rounded-full px-10 py-1 mt-2 block text-center text-white`}
     >
       {content}
     </span>
