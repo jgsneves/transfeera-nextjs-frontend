@@ -29,16 +29,18 @@ export const UnderlineTabs = () => {
             "bg-primary border-b-2 border-white shadow-none rounded-none",
         }}
       >
-        {data.map(({ label, value }) => (
-          <Tab
-            key={value}
-            value={value}
-            onClick={() => setActiveTab(value)}
-            className="text-white text-sm w-[130px] p-0 py-4 justify-start text-left"
-          >
-            {label}
-          </Tab>
-        ))}
+        <div className="max-w-[1024px] mx-auto flex-1">
+          {data.map(({ label, value }) => (
+            <Tab
+              key={value}
+              value={value}
+              onClick={() => setActiveTab(value)}
+              className="text-white text-sm w-[130px] p-0 py-4 justify-start text-left"
+            >
+              {label}
+            </Tab>
+          ))}
+        </div>
       </TabsHeader>
       <TabsBody>
         {data.map(({ value, desc }) => (

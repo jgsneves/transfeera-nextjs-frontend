@@ -1,10 +1,11 @@
 import Head from "next/head";
 import { Header } from "../components/Header";
-import { UnderlineTabs } from "../components/UnderlineTabs/indext";
+import { UnderlineTabs } from "../components/UnderlineTabs";
 import { Toast } from "../components/Toast";
 import { createPortal } from "react-dom";
+import dynamic from "next/dynamic";
 
-export default function Home() {
+const Home = () => {
   return (
     <>
       <Head>
@@ -13,11 +14,15 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="max-w-screen-lg mx-auto">
+      <main>
         <Header />
         <UnderlineTabs />
         {createPortal(<Toast />, document.body)}
       </main>
     </>
   );
-}
+};
+
+export default dynamic(() => Promise.resolve(Home), {
+  ssr: false,
+});

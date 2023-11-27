@@ -87,10 +87,10 @@ export const Table = ({
   };
 
   return (
-    <table>
+    <table className="w-[1024px]">
       <thead>
         <tr>
-          <th>
+          <th className="w-[30px]">
             <input
               type="checkbox"
               className="w-5 h-5 rounded-lg"
@@ -98,59 +98,59 @@ export const Table = ({
               onChange={() => handleSelectAllCheckboxOnClick()}
             />
           </th>
-          <th
-            className="cursor-pointer"
-            onClick={() => handleTHOnClick("name")}
-          >
-            <p className="flex text-gray-500">
-              Favorecido
-              {sorting === "name" && renderSortingSvg()}
-            </p>
+
+          <th className="w-[130px]">
+            <button onClick={() => handleTHOnClick("name")}>
+              <p className="flex text-gray-500">
+                Favorecido
+                {sorting === "name" && renderSortingSvg()}
+              </p>
+            </button>
           </th>
-          <th
-            className="cursor-pointer"
-            onClick={() => handleTHOnClick("tax_id")}
-          >
-            <p className="flex text-gray-500">
-              CPF/CNPJ
-              {sorting === "tax_id" && renderSortingSvg()}
-            </p>
+
+          <th className="w-[150px]">
+            <button onClick={() => handleTHOnClick("tax_id")}>
+              <p className="flex text-gray-500">
+                CPF/CNPJ
+                {sorting === "tax_id" && renderSortingSvg()}
+              </p>
+            </button>
           </th>
-          <th
-            className="cursor-pointer"
-            onClick={() => handleTHOnClick("bank_name")}
-          >
-            <p className="flex text-gray-500">
-              Banco
-              {sorting === "bank_name" && renderSortingSvg()}
-            </p>
+
+          <th className="w-[130px]">
+            <button onClick={() => handleTHOnClick("bank_name")}>
+              <p className="flex text-gray-500">
+                Banco
+                {sorting === "bank_name" && renderSortingSvg()}
+              </p>
+            </button>
           </th>
-          <th
-            className="cursor-pointer"
-            onClick={() => handleTHOnClick("branch")}
-          >
-            <p className="flex text-gray-500">
-              Agência
-              {sorting === "branch" && renderSortingSvg()}
-            </p>
+
+          <th className="w-[130px]">
+            <button onClick={() => handleTHOnClick("branch")}>
+              <p className="flex text-gray-500">
+                Agência
+                {sorting === "branch" && renderSortingSvg()}
+              </p>
+            </button>
           </th>
-          <th
-            className="cursor-pointer"
-            onClick={() => handleTHOnClick("account")}
-          >
-            <p className="flex text-gray-500">
-              CC
-              {sorting === "account" && renderSortingSvg()}
-            </p>
+
+          <th className="w-[130px]">
+            <button onClick={() => handleTHOnClick("account")}>
+              <p className="flex text-gray-500">
+                CC
+                {sorting === "account" && renderSortingSvg()}
+              </p>
+            </button>
           </th>
-          <th
-            className="cursor-pointer"
-            onClick={() => handleTHOnClick("status")}
-          >
-            <p className="flex text-gray-500">
-              Status do favorecido
-              {sorting === "status" && renderSortingSvg()}
-            </p>
+
+          <th className="w-[200px]">
+            <button onClick={() => handleTHOnClick("status")}>
+              <p className="flex text-gray-500">
+                Status do favorecido
+                {sorting === "status" && renderSortingSvg()}
+              </p>
+            </button>
           </th>
         </tr>
       </thead>

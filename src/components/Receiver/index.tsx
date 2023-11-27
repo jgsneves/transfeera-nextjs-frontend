@@ -10,9 +10,11 @@ export const ReceiverTabContent = () => {
 
   return (
     <section className="flex flex-col">
-      <div className="flex justify-between bg-gray-200">
-        <CreateReceiver />
-        <FilterReceiver />
+      <div className="bg-gray-200">
+        <div className="flex flex-row max-w-[1024px] mx-auto flex-1 justify-between">
+          <CreateReceiver />
+          <FilterReceiver />
+        </div>
       </div>
       <ShowReceivers />
       <Modal>

@@ -66,7 +66,7 @@ export default function NovoFavorecido() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="max-w-screen-lg mx-auto">
+      <main className="max-w-[1024px] mx-auto">
         <Header />
 
         <nav className="bg-primary flex justify-end h-[50px] items-center">

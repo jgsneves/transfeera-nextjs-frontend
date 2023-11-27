@@ -58,7 +58,7 @@ export const ShowReceivers = () => {
   };
 
   return (
-    <article className="flex flex-col">
+    <article className="flex flex-col mx-auto">
       <Button
         theme="danger"
         className="my-10"
