@@ -1,4 +1,4 @@
 export enum ReceiverStatus {
   RASCUNHO = "rascunho",
-  VALIDO = "validado",
+  VALIDADO = "validado",
 }
